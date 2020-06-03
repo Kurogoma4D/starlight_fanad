@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:starlight_fanad/animation_manager.dart';
+import 'package:provider/provider.dart';
 
 class DelayedCurve extends Curve {
   const DelayedCurve();
@@ -9,12 +11,12 @@ class DelayedCurve extends Curve {
   }
 }
 
-class TextAnimation extends StatefulWidget {
+class TextAnimationDesktop extends StatefulWidget {
   @override
-  _TextAnimationState createState() => _TextAnimationState();
+  _TextAnimationDesktopState createState() => _TextAnimationDesktopState();
 }
 
-class _TextAnimationState extends State<TextAnimation>
+class _TextAnimationDesktopState extends State<TextAnimationDesktop>
     with TickerProviderStateMixin {
   AnimationController _primaryController;
   AnimationController _secondaryController;
@@ -51,7 +53,7 @@ class _TextAnimationState extends State<TextAnimation>
           });
 
     _secondaryController = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 3600),
       vsync: this,
     );
     _secondaryAnimation =
@@ -67,6 +69,7 @@ class _TextAnimationState extends State<TextAnimation>
               ..addStatusListener((status) {
                 if (status == AnimationStatus.completed) {
                   _opacity = 0;
+                  context.read<AnimationManager>().state = AnimationState.MAIN;
                 }
               });
 
@@ -75,17 +78,20 @@ class _TextAnimationState extends State<TextAnimation>
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.headline3.copyWith(
+    final style = Theme.of(context).textTheme.headline4.copyWith(
           fontFamily: 'NotoSerif',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           color: Colors.white,
+          letterSpacing: 1.6,
         );
+    final left = (MediaQuery.of(context).size.width - 16 * 34) / 2;
     return AnimatedOpacity(
       opacity: _opacity,
       duration: const Duration(milliseconds: 650),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          SizedBox(width: left),
           Text(_primaryText, style: style),
           const SizedBox(width: 16),
           Text(_secondaryText, style: style),
