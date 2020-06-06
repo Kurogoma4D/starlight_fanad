@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlight_fanad/animation_manager.dart';
 import 'package:starlight_fanad/sections/init_section.dart';
+import 'package:starlight_fanad/sections/main_section.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage._({Key key}) : super(key: key);
@@ -35,7 +36,7 @@ class AnimationSwitch extends StatelessWidget {
         return InitSection.wrapped();
 
       case AnimationState.MAIN:
-        return Container();
+        return const MainSection();
 
       case AnimationState.END:
         return Container();
