@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlight_fanad/animation_manager.dart';
-import 'package:starlight_fanad/animations/text_animation.dart';
 import 'package:starlight_fanad/sections/init_section.dart';
 
 class RootPage extends StatelessWidget {
@@ -20,9 +19,7 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff161616),
-      body: Center(
-        child: TextAnimationDesktop(),
-      ),
+      body: const AnimationSwitch(),
     );
   }
 }
@@ -35,7 +32,7 @@ class AnimationSwitch extends StatelessWidget {
     final state = context.select((AnimationManager manager) => manager.state);
     switch (state) {
       case AnimationState.INIT:
-        return const InitSection();
+        return InitSection.wrapped();
 
       case AnimationState.MAIN:
         return Container();

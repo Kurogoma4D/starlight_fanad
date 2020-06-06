@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:starlight_fanad/animation_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:starlight_fanad/sections/init_section.dart';
 
 class DelayedCurve extends Curve {
   const DelayedCurve();
@@ -12,6 +15,8 @@ class DelayedCurve extends Curve {
 }
 
 class TextAnimationDesktop extends StatefulWidget {
+  const TextAnimationDesktop({Key key}) : super(key: key);
+
   @override
   _TextAnimationDesktopState createState() => _TextAnimationDesktopState();
 }
@@ -19,61 +24,36 @@ class TextAnimationDesktop extends StatefulWidget {
 class _TextAnimationDesktopState extends State<TextAnimationDesktop>
     with TickerProviderStateMixin {
   AnimationController _primaryController;
-  AnimationController _secondaryController;
   Animation<double> _primaryAnimation;
-  Animation<double> _secondaryAnimation;
+  Stream<bool> _textChain;
 
-  String _primaryText = '';
-  String _secondaryText = '';
-  final primary = 'あの星を';
-  final secondary = '掴むのはだぁれ？';
+  final primary = 'あの星を 掴むのはだぁれ？'.split('');
 
   double _opacity = 1;
 
   @override
   void initState() {
     super.initState();
+    _textChain = context.read<InitSectionController>().textChain.stream;
     _primaryController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 3500),
       vsync: this,
     );
     _primaryAnimation = Tween<double>(begin: 0, end: primary.length.toDouble())
         .chain(CurveTween(curve: const DelayedCurve()))
         .animate(_primaryController)
-          ..addListener(
-            () => setState(() {
-              _primaryText =
-                  primary.substring(0, _primaryAnimation.value.toInt());
-            }),
-          )
+          ..addListener(() => setState(() {}))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              _secondaryController.forward();
+              _opacity = 0;
+              Future.delayed(const Duration(milliseconds: 650)).then((_) =>
+                  context.read<AnimationManager>().state = AnimationState.MAIN);
             }
           });
 
-    _secondaryController = AnimationController(
-      duration: const Duration(milliseconds: 3600),
-      vsync: this,
-    );
-    _secondaryAnimation =
-        Tween<double>(begin: 0, end: secondary.length.toDouble())
-            .chain(CurveTween(curve: const DelayedCurve()))
-            .animate(_secondaryController)
-              ..addListener(
-                () => setState(() {
-                  _secondaryText =
-                      secondary.substring(0, _secondaryAnimation.value.toInt());
-                }),
-              )
-              ..addStatusListener((status) {
-                if (status == AnimationStatus.completed) {
-                  _opacity = 0;
-                  context.read<AnimationManager>().state = AnimationState.MAIN;
-                }
-              });
-
-    _primaryController.forward();
+    _textChain.listen((event) {
+      if (event) _primaryController.forward();
+    });
   }
 
   @override
@@ -84,26 +64,23 @@ class _TextAnimationDesktopState extends State<TextAnimationDesktop>
           color: Colors.white,
           letterSpacing: 1.6,
         );
-    final left = (MediaQuery.of(context).size.width - 16 * 34) / 2;
     return AnimatedOpacity(
       opacity: _opacity,
       duration: const Duration(milliseconds: 650),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(width: left),
-          Text(_primaryText, style: style),
-          const SizedBox(width: 16),
-          Text(_secondaryText, style: style),
-        ],
-      ),
+      child: Row(children: <Widget>[
+        for (int i = 0; i < primary.length; i++)
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 350),
+            opacity: _primaryAnimation.value > i.toDouble() ? 1 : 0,
+            child: Text(primary[i], style: style),
+          ),
+      ]),
     );
   }
 
   @override
   void dispose() {
     _primaryController.dispose();
-    _secondaryController.dispose();
     super.dispose();
   }
 }
