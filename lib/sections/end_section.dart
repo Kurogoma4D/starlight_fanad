@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlight_fanad/animation_manager.dart';
+import 'package:starlight_fanad/root_page_controller.dart';
 
 class EndSection extends StatefulWidget {
   const EndSection({Key key}) : super(key: key);
@@ -31,6 +32,7 @@ class _EndSectionState extends State<EndSection> {
 
   @override
   Widget build(BuildContext context) {
+    final title = context.watch<RootPageController>().images['title'];
     return Center(
       child: AnimatedOpacity(
         opacity: _opacity,
@@ -42,7 +44,7 @@ class _EndSectionState extends State<EndSection> {
               constraints: BoxConstraints(maxWidth: 1200),
               child: FractionallySizedBox(
                 widthFactor: 0.8,
-                child: Image.asset('images/01_rondo_color.png'),
+                child: title,
               ),
             ),
             const SizedBox(height: 24),

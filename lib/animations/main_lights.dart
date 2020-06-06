@@ -4,7 +4,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:starlight_fanad/animations/kirin_animation.dart';
 import 'package:starlight_fanad/constants.dart';
+import 'package:starlight_fanad/root_page_controller.dart';
+import 'package:provider/provider.dart';
 
 class MainLights extends StatefulWidget {
   const MainLights({Key key}) : super(key: key);
@@ -58,22 +61,7 @@ class _MainLightsState extends State<MainLights>
               ),
             ),
           ),
-          Center(
-            child: AnimatedBuilder(
-              animation: _controller,
-              child: Image.asset(
-                'images/04_icon02.png',
-                width: 64,
-                height: 64,
-              ),
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: _controller.value * 2 * pi,
-                  child: child,
-                );
-              },
-            ),
-          ),
+          Center(child: const KirinAnimation()),
         ],
       ),
     );
@@ -89,7 +77,7 @@ class _MainLightsState extends State<MainLights>
 class _LightPainter extends CustomPainter {
   _LightPainter({this.radius});
 
-  final radius;
+  final double radius;
 
   final gradient = RadialGradient(
     center: const Alignment(0, 0),

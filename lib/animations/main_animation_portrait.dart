@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:starlight_fanad/animation_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:starlight_fanad/root_page_controller.dart';
 
 class MainAnimationPortrait extends StatefulWidget {
   MainAnimationPortrait({Key key, this.height}) : super(key: key);
@@ -32,11 +33,10 @@ class _MainAnimationPortraitState extends State<MainAnimationPortrait>
   void initState() {
     _scrollController = ScrollController();
 
-    final numbers = List.generate(40, (index) => index + 1);
-    numbers.shuffle();
+    final loaded = context.read<RootPageController>().images;
 
     for (var i = 0; i < words.length; i++) {
-      images.add(Image.asset('images/05_photo${numbers[i].toString()}.jpg'));
+      images.add(loaded['visual' + i.toString()]);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
