@@ -91,6 +91,15 @@ class _MainAnimationPortraitState extends State<MainAnimationPortrait>
                 return SizedBox(height: widget.height / 0.4);
               }
 
+              if (i == words.length) {
+                return SizedBox(
+                  height: widget.height,
+                  child: Center(
+                    child: Text(words.last, style: style),
+                  ),
+                );
+              }
+
               final index = i - 1;
               return SizedBox(
                 height: widget.height,

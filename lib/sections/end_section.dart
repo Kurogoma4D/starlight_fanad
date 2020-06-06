@@ -41,14 +41,14 @@ class _EndSectionState extends State<EndSection> {
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 1200),
               child: FractionallySizedBox(
-                widthFactor: 0.4,
+                widthFactor: 0.8,
                 child: Image.asset('images/01_rondo_color.png'),
               ),
             ),
             const SizedBox(height: 24),
             Text(
               '©Project Revue Starlight',
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
+              style: Theme.of(context).textTheme.caption.copyWith(
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
