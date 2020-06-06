@@ -16,15 +16,14 @@ class MainLights extends StatefulWidget {
 class _MainLightsState extends State<MainLights>
     with SingleTickerProviderStateMixin {
   double _opacity = 0;
-  List<Offset> particleOffsets = [];
-  final random = Random();
+  AnimationController _controller;
 
   @override
   void initState() {
-    particleOffsets = List<Offset>.generate(
-      20,
-      (_) => Offset(random.nextDouble(), random.nextDouble()),
-    );
+    _controller = AnimationController(
+      duration: const Duration(seconds: 15),
+      vsync: this,
+    )..repeat();
 
     _timeLine();
 
@@ -45,19 +44,45 @@ class _MainLightsState extends State<MainLights>
       opacity: _opacity,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCirc,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 2,
-        child: OrientationLayoutBuilder(
-          landscape: (context) => CustomPaint(
-            painter: _LightPainter(radius: 120),
+      child: Stack(
+        children: <Widget>[
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 2,
+            child: OrientationLayoutBuilder(
+              landscape: (context) => CustomPaint(
+                painter: _LightPainter(radius: 120),
+              ),
+              portrait: (context) => CustomPaint(
+                painter: _LightPainter(radius: 60),
+              ),
+            ),
           ),
-          portrait: (context) => CustomPaint(
-            painter: _LightPainter(radius: 60),
+          Center(
+            child: AnimatedBuilder(
+              animation: _controller,
+              child: Image.asset(
+                'images/04_icon02.png',
+                width: 64,
+                height: 64,
+              ),
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _controller.value * 2 * pi,
+                  child: child,
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
