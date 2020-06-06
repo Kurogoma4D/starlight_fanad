@@ -49,7 +49,7 @@ class _InitSpotlightState extends State<InitSpotlight>
     setState(() => _opacity = 1);
     await Future.delayed(const Duration(milliseconds: 2000));
     _chainSink.add(true);
-    await Future.delayed(const Duration(milliseconds: 3600));
+    await Future.delayed(const Duration(milliseconds: 4000));
     setState(() => _opacity = 0);
   }
 

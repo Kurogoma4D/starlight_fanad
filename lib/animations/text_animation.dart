@@ -46,7 +46,7 @@ class _TextAnimationDesktopState extends State<TextAnimationDesktop>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               _opacity = 0;
-              Future.delayed(const Duration(milliseconds: 650)).then((_) =>
+              Future.delayed(const Duration(milliseconds: 2000)).then((_) =>
                   context.read<AnimationManager>().state = AnimationState.MAIN);
             }
           });

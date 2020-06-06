@@ -42,7 +42,7 @@ class _MainAnimationState extends State<MainAnimation>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _scrollController.animateTo(
         widget.height * (words.length + 1),
-        duration: const Duration(seconds: 30),
+        duration: const Duration(seconds: 40),
         curve: Curves.linear,
       );
       await Future.delayed(const Duration(seconds: 2));
