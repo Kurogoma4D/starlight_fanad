@@ -9,7 +9,7 @@ enum AnimationState {
 class AnimationManager extends ChangeNotifier {
   AnimationManager();
 
-  AnimationState _state = AnimationState.MAIN;
+  AnimationState _state = AnimationState.INIT;
 
   AnimationState get state => _state;
 
