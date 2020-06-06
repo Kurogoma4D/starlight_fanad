@@ -3,16 +3,16 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:starlight_fanad/animation_manager.dart';
 import 'package:provider/provider.dart';
 
-class MainAnimation extends StatefulWidget {
-  MainAnimation({Key key, this.height}) : super(key: key);
+class MainAnimationPortrait extends StatefulWidget {
+  MainAnimationPortrait({Key key, this.height}) : super(key: key);
 
   final height;
 
   @override
-  _MainAnimationState createState() => _MainAnimationState();
+  _MainAnimationPortraitState createState() => _MainAnimationPortraitState();
 }
 
-class _MainAnimationState extends State<MainAnimation>
+class _MainAnimationPortraitState extends State<MainAnimationPortrait>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController;
 
@@ -41,7 +41,7 @@ class _MainAnimationState extends State<MainAnimation>
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _scrollController.animateTo(
-        widget.height * (words.length + 1),
+        widget.height * words.length + (widget.height / 0.4 * 2),
         duration: const Duration(seconds: 40),
         curve: Curves.linear,
       );
@@ -82,13 +82,13 @@ class _MainAnimationState extends State<MainAnimation>
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 1500),
           opacity: _opacity,
-          child: ListView.separated(
+          child: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             controller: _scrollController,
-            itemCount: words.length + 1,
+            itemCount: words.length + 2,
             itemBuilder: (context, i) {
-              if (i == 0) {
-                return SizedBox(height: widget.height);
+              if (i == 0 || i == words.length + 1) {
+                return SizedBox(height: widget.height / 0.4);
               }
 
               final index = i - 1;
@@ -105,12 +105,6 @@ class _MainAnimationState extends State<MainAnimation>
                         const SizedBox(width: 64),
                         Flexible(child: images[index]),
                       ]),
-              );
-            },
-            separatorBuilder: (context, _) {
-              return OrientationLayoutBuilder(
-                landscape: (context) => const SizedBox(height: 128),
-                portrait: (context) => const SizedBox(height: 8),
               );
             },
           ),
